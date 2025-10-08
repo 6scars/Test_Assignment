@@ -1,4 +1,5 @@
-export default function register() {
+import { useState } from "react";
+export default function Register() {
   const [registerData, setRegisterData] = useState({
     email: "",
     password: "",
