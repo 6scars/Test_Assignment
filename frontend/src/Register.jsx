@@ -11,14 +11,41 @@ export default function Register() {
     const passwordRegex = /[A-Z]/;
     if (!email) {
       alert("there is no email");
+      return false;
     } else if (!emailRegex.test(email)) {
       alert("Please enter valid email address!");
+      return false;
     } else if (!password) {
       alert("enter password");
+      return false;
     } else if (password.length < 6) {
       alert("password is too short");
+      return false;
     } else if (!passwordRegex.test(password)) {
       alert("password must contain atleast one uppercase letter");
+      return false;
+    }
+    return true;
+  }
+
+  async function Register() {
+    if (validate()) {
+      const { email, password } = registerData;
+      try {
+        const response = await fetch("http://localhost:3001/api/registerUser", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        });
+
+        const data = await response.json();
+
+        console.log(data);
+      } catch (err) {
+        console.log('register function',err);
+      }
     }
   }
 
@@ -50,7 +77,7 @@ export default function Register() {
           }}
         />
       </form>
-      <button onClick={validate} />
+      <button onClick={Register} />
     </>
   );
 }

@@ -38,6 +38,6 @@ connectDB().then((database) => {
 app.get('/', async (req, res) => {
     res.send('hello world')
 })
-
+app.use('/api',router);
 
 
