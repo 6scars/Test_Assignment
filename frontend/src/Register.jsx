@@ -7,7 +7,7 @@ export default function register() {
   function validate() {
     const { email, password } = registerData;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
+    const passwordRegex = /[A-Z]/;
     if (!email) {
       alert("there is no email");
     } else if (!emailRegex.test(email)) {
@@ -16,6 +16,8 @@ export default function register() {
       alert("enter password");
     } else if (password.length < 6) {
       alert("password is too short");
+    } else if (!passwordRegex.test(password)) {
+      alert("password must contain atleast one uppercase letter");
     }
   }
 
