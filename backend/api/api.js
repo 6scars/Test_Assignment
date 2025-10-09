@@ -7,7 +7,7 @@ export async function validateInput() {
         const { email, password } = req.body;
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         const passwordRegex = /[A-Z]/
-        
+
         if (!email || !password) {
             return res.status(400).json({ message: 'Email and password are required.' });
         }
@@ -61,6 +61,11 @@ export async function registerUser(req, res, next) {
     }
 }
 
-export async function login(req, res, next) {
-    return 0;
+export async function loginUser(req, res, next) {
+    try{
+        console.log(req.body.email)
+        return 0;
+    }catch(err){
+        res.status(500).json({message:'Internal server problem'})
+    }
 }

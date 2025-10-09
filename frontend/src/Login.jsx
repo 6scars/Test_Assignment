@@ -5,32 +5,52 @@ export default function Login() {
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
 
   function validate() {
     const { email, password } = loginData;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const passwordRegex = /[A-Z]/;
 
     if (!email) {
-      alert("There is no email");
+      setError("There is no email");
+      return false;
     } else if (!emailRegex.test(email)) {
-      alert("Please enter valid email address!");
+      setError("Please enter valid email address!");
+      return false;
     } else if (!password) {
-      alert("Enter password");
-    } else if (password.length < 6) {
-      alert("Password is too short");
-    } else if (!passwordRegex.test(password)) {
-      alert("Password must contain atleast one uppercase letter");
+      setError("Enter password");
+      return false;
+    }
+    return true;
+  }
+
+  async function login() {
+    try {
+      if (validate()) {
+        const { email, password } = loginData;
+        const response = await fetch("http://localhost:3001/api/loginUser", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        });
+        const data = await response.json();
+        console.log(data);
+      }
+    } catch (err) {
+      console.log('login function error' ,err)
     }
   }
 
   return (
     <>
-    <p>LOGIN PAGE</p>
+      <p>LOGIN PAGE</p>
       <form name="loginForm">
         <input
           type="email"
           name="email"
+          autoComplete="current-email"
           placeholder="email"
           onChange={(e) => {
             setLoginData((prev) => ({
@@ -44,6 +64,7 @@ export default function Login() {
           type="password"
           name="password"
           placeholder="password"
+          autoComplete="current-password"
           onChange={(e) => {
             setLoginData((prev) => ({
               ...prev,
@@ -53,7 +74,8 @@ export default function Login() {
           }}
         />
       </form>
-      <button onClick={validate} />
+      <button onClick={login}>LOGIN</button>
+      <p>{error}</p>
     </>
   );
 }
