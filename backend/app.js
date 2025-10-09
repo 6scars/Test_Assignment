@@ -1,7 +1,7 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
-import router from './router.js'
+import router from './router/router.js'
 import mongoose from 'mongoose'
 import morgan from 'morgan'
 dotenv.config()

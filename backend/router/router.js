@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv'
 import { MongoClient } from 'mongodb'
 
-import {registerUser, hashPassword} from './api.js' 
+import {registerUser, hashPassword} from '../api/api.js' 
 dotenv.config()
 
 

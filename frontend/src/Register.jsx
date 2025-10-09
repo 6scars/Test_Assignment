@@ -5,6 +5,7 @@ export default function Register() {
     email: "",
     password: "",
   });
+  const [error, setError] = useState(''); 
   const navigate = useNavigate();
 
 
@@ -13,19 +14,19 @@ export default function Register() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordRegex = /[A-Z]/;
     if (!email) {
-      alert("there is no email");
+      setError("there is no email");
       return false;
     } else if (!emailRegex.test(email)) {
-      alert("Please enter valid email address!");
+      setError("Please enter valid email address!");
       return false;
     } else if (!password) {
-      alert("enter password");
+      setError("enter password");
       return false;
     } else if (password.length < 6) {
-      alert("password is too short");
+      setError("password is too short");
       return false;
     } else if (!passwordRegex.test(password)) {
-      alert("password must contain atleast one uppercase letter");
+      setError("password must contain atleast one uppercase letter");
       return false;
     }
     return true;
@@ -46,6 +47,10 @@ export default function Register() {
         const data = await response.json();
 
         console.log(data);
+
+        if(!response.ok){
+          setError(data.message);
+        }
         if(data.redirectTo){
           navigate(data.redirectTo)
         }
@@ -87,6 +92,7 @@ export default function Register() {
         />
       </form>
       <button onClick={Register}> register</button>
+      <p>{error}</p>
     </>
   );
 }
