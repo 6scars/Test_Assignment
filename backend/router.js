@@ -1,21 +1,18 @@
 import express from 'express';
 import dotenv from 'dotenv'
 import { MongoClient } from 'mongodb'
+
+import {registerUser} from './api.js' 
 dotenv.config()
 
 
 const router = express.Router();
-const MONGO_URI = process.env.MONGO_URI;
-const client = new MongoClient(MONGO_URI)
-router.post('/registerUser', (req, res) => {
+router.post('/registerUser', registerUser, (req, res, next) => {
     try{
-        console.log(req.body)
-        res.status(201).json({message:"user registered"})
+        res.status(201).json(req.mess)
     }catch(err){
-        console.log('REGISTER-USER ERROR',err)
-        res.status(400).json({message:"user NOT registered"})
+        res.status(500).json({message:'registerUser error '})
     }
-
 })
 
 export default router;

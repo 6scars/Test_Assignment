@@ -44,7 +44,7 @@ export default function Register() {
 
         console.log(data);
       } catch (err) {
-        console.log('register function',err);
+        console.log("register function", err);
       }
     }
   }
@@ -55,6 +55,7 @@ export default function Register() {
         <input
           type="email"
           name="email"
+          autoComplete="new-email"
           placeholder="email"
           onChange={(e) => {
             setRegisterData((prev) => ({
@@ -67,6 +68,7 @@ export default function Register() {
         <input
           type="password"
           name="password"
+          autoComplete="new-password"
           placeholder="password"
           onChange={(e) => {
             setRegisterData((prev) => ({
@@ -77,7 +79,7 @@ export default function Register() {
           }}
         />
       </form>
-      <button onClick={Register} />
+      <button onClick={Register}> register</button>
     </>
   );
 }
