@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 export default function Register() {
   const [registerData, setRegisterData] = useState({
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
+
 
   function validate() {
     const { email, password } = registerData;
@@ -43,6 +46,9 @@ export default function Register() {
         const data = await response.json();
 
         console.log(data);
+        if(data.redirectTo){
+          navigate(data.redirectTo)
+        }
       } catch (err) {
         console.log("register function", err);
       }
@@ -51,6 +57,7 @@ export default function Register() {
 
   return (
     <>
+      <p>REGISTER PAGE</p>
       <form name="registerForm">
         <input
           type="email"

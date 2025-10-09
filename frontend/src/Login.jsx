@@ -26,6 +26,7 @@ export default function Login() {
 
   return (
     <>
+    <p>LOGIN PAGE</p>
       <form name="loginForm">
         <input
           type="email"
