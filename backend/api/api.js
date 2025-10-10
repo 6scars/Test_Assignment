@@ -1,6 +1,9 @@
 import User from '../schemas/userSchema.js'
 import mongoose from 'mongoose'
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
+import dotenv from 'dotenv'
+dotenv.config()
 
 export async function validateInput() {
     try {
@@ -61,22 +64,36 @@ export async function registerUser(req, res, next) {
 }
 
 export async function loginUser(req, res, next) {
-    try{
-        const {email, password} = req.body;
-        const findedUser = await User.findOne({email:email})
-        const isMatch = await bcrypt.compare(password, findedUser.password)
+    const JWT_KEY = process.env.JWT_KEY;
+    try {
+        const { email, password } = req.body;
+        const foundedUser = await User.findOne({ email: email });
+        if(!foundedUser){
+            return res.status(401).json({message:'wrong email'})
+        }
+        const isMatch = await bcrypt.compare(password, foundedUser.password);
+        if (!isMatch) {
+            return res.status(401).json({ message: "wrong password" })
+        };
+        
+        const token = jwt.sign(
+            {
+                id: foundedUser._id, email: foundedUser.email,
+            },
+            JWT_KEY,
+            {expiresIn:"1h"}
+        )
+        
 
-        if(!isMatch){
-            return res.status(400).json({message:"wrong password"})
-        }
-        console.log(findedUser)
-        req.mess = "Loging ..."
-        req.redirectTo = "WelcomePage"
+        req.mess = "Loging ...";
+        req.redirectTo = "WelcomePage";
         req.user = {
-            email:findedUser.email
-        }
+            email: foundedUser.email,
+            token:token
+        };
+
         next()
-    }catch(err){
-        return res.status(500).json({message:'Internal server problem'})
+    } catch (err) {
+        return res.status(500).json({ message: 'Internal server problem' })
     }
 }

@@ -38,11 +38,9 @@ export default function Login({setUser}) {
           body: JSON.stringify({ email, password }),
         });
         const data = await response.json();
-        console.log(data)
         setNotify(data.message);
-        setUser({
-          email: data.user.email
-        });
+        setUser({ email: data.user.email});
+        localStorage.setItem('jwt',data.user.token)
         if (data.redirectTo) {
           navigate("/welcomePage");
         }
@@ -79,7 +77,6 @@ export default function Login({setUser}) {
               ...prev,
               password: e.target.value,
             }));
-            console.log(loginData);
           }}
         />
       </form>
