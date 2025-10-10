@@ -17,9 +17,9 @@ router.post('/registerUser', hashPassword, registerUser, (req, res, next) => {
 })
 
 
-router.post('/loginUser', loginUser , (req, res, next) => {
+router.post('/loginUser', hashPassword ,loginUser , (req, res, next) => {
     try{
-        res.status(201).json({message: req.mess, redirectTo: req.redirectTo})
+        res.status(201).json({message: req.mess, redirectTo: req.redirectTo, user: req.user})
         return 0
     }catch(err){
         return res.status(500).json({message:'registerUser error '})

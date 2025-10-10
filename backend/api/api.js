@@ -35,7 +35,6 @@ export async function hashPassword(req, res, next) {
         const password = req.body.password;
         const hashedPassword = await bcrypt.hash(password, 10)
         req.body.hashedPassword = hashedPassword;
-        console.log(hashedPassword)
         next();
     } catch (err) {
         return res.status(500).json({ message: 'hashPasswordError', err })
@@ -63,9 +62,21 @@ export async function registerUser(req, res, next) {
 
 export async function loginUser(req, res, next) {
     try{
-        console.log(req.body.email)
-        return 0;
+        const {email, password} = req.body;
+        const findedUser = await User.findOne({email:email})
+        const isMatch = await bcrypt.compare(password, findedUser.password)
+
+        if(!isMatch){
+            return res.status(400).json({message:"wrong password"})
+        }
+        console.log(findedUser)
+        req.mess = "Loging ..."
+        req.redirectTo = "WelcomePage"
+        req.user = {
+            email:findedUser.email
+        }
+        next()
     }catch(err){
-        res.status(500).json({message:'Internal server problem'})
+        return res.status(500).json({message:'Internal server problem'})
     }
 }

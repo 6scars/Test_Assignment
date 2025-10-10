@@ -1,30 +1,32 @@
 import { useState } from "react";
-
-export default function Login() {
+import { useNavigate } from "react-router-dom";
+export default function Login({setUser}) {
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   });
-  const [error, setError] = useState("");
+  const [notify, setNotify] = useState("");
+  const navigate = useNavigate();
 
   function validate() {
     const { email, password } = loginData;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!email) {
-      setError("There is no email");
+      setNotify("There is no email");
       return false;
     } else if (!emailRegex.test(email)) {
-      setError("Please enter valid email address!");
+      setNotify("Please enter valid email address!");
       return false;
     } else if (!password) {
-      setError("Enter password");
+      setNotify("Enter password");
       return false;
     }
     return true;
   }
 
   async function login() {
+    setNotify("");
     try {
       if (validate()) {
         const { email, password } = loginData;
@@ -36,10 +38,17 @@ export default function Login() {
           body: JSON.stringify({ email, password }),
         });
         const data = await response.json();
-        console.log(data);
+        console.log(data)
+        setNotify(data.message);
+        setUser({
+          email: data.user.email
+        });
+        if (data.redirectTo) {
+          navigate("/welcomePage");
+        }
       }
     } catch (err) {
-      console.log('login function error' ,err)
+      console.log("login function error", err);
     }
   }
 
@@ -75,7 +84,7 @@ export default function Login() {
         />
       </form>
       <button onClick={login}>LOGIN</button>
-      <p>{error}</p>
+      <p>{notify}</p>
     </>
   );
 }
